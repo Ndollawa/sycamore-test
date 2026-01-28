@@ -6,32 +6,17 @@ import { useDashboard } from "~/composables/dashboard/shared";
 import HomePeriodSelect from "~/components/dashboard/home/HomePeriodSelect.vue";
 import HomeDateRangePicker from "~/components/dashboard/home/HomeDateRangePicker.vue";
 import HomeStats from "~/components/dashboard/home/HomeStats.vue";
+import CryptoPrices from "~/components/dashboard/home/CryptoPrices.vue";
 // import HomeChartClient from "~/components/dashboard/home/HomeChart.client.vue";
 // import HomeSales from "~/components/dashboard/home/HomeSales.vue";
-import { useCryptoPricesAPI } from "~/composables/api/dashboard";
 
 definePageMeta({
   layout: "dashboard",
 });
 
-const { getCryptoPricesQuery } = useCryptoPricesAPI();
-const queryArgs = computed(() => ({
-  params: {
-    vs_currency: "usd",
-    order: "market_cap_desc",
-    per_page: 10,
-  },
-}));
-
-const { data, isLoading, isError, error } = getCryptoPricesQuery(queryArgs);
 
 const { isNotificationsSlideoverOpen } = useDashboard();
 
-const columns = [
-  { key: "name", label: "Coin" },
-  { key: "current_price", label: "Price (USD)" },
-  { key: "market_cap", label: "Market Cap" },
-];
 const items = [
   [
     {
@@ -94,21 +79,10 @@ const period = ref<Period>("daily");
 
     <template #body>
       <HomeStats :period="period" :range="range" />
-      <!-- <HomeChartClient :period="period" :range="range" />
-      <HomeSales :period="period" :range="range" /> -->
-      <div>
-        <h1 class="text-xl font-semibold mb-4">Crypto Price Tracker</h1>
+      <!-- <HomeChartClient :period="period" :range="range" /> -->
+      <!-- <HomeSales :period="period" :range="range" /> -->
+      <CryptoPrices  />
 
-        <div v-if="isLoading">Loading prices...</div>
-
-        <div v-else-if="isError">Failed to load data: {{ error?.message }}</div>
-
-        <div v-else-if="!data || data.length === 0">
-          No crypto data available
-        </div>
-
-        <UTable v-else :columns="columns" :rows="data" />
-      </div>
     </template>
   </UDashboardPanel>
 </template>

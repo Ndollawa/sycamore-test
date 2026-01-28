@@ -7,6 +7,7 @@ const axiosInstance = $axiosPrivate() as unknown as AxiosInstance ;
 
   const getCryptoPrices = async (requestConfig?: AxiosRequestConfig) => {
     const res = await axiosInstance.get("/api/dashboard/crypto", requestConfig);
+    console.log(res)
     return res?.data;
   };
 
