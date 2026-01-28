@@ -12,7 +12,12 @@ export default defineNuxtConfig({
   routeRules: {
     "/": { prerender: true },
   },
-
+  nitro: {
+    prerender: {
+      crawlLinks: false,
+      routes: [],
+    },
+  },
   debug: isDev,
 
   compatibilityDate: "2025-01-15",
