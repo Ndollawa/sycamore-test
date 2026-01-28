@@ -94,13 +94,10 @@ const columns: TableColumn<Crypto>[] = [
   <div class="">
     <h1 class="text-xl font-semibold mb-4">Crypto Price Tracker</h1>
 
-    <div v-if="isLoading">Loading prices...</div>
-
-    <div v-else-if="isError">Failed to load data: {{ error?.message }}</div>
-
-    <div v-else-if="!data || data.length === 0">No crypto data available</div>
-    <UTable
-      v-else
+ <!-- Skeleton Loading -->
+ <UTable
+    v-if="(isLoading || data.length) && !isError"
+      :loading="isLoading"
       :data="data"
       :columns="columns"
       class="shrink-0"
@@ -112,5 +109,7 @@ const columns: TableColumn<Crypto>[] = [
         td: 'border-b border-default',
       }"
     />
+    <div v-if="isError">Failed to load data: {{ error?.message }}</div>
+
   </div>
 </template>

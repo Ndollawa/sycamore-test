@@ -80,8 +80,8 @@ const period = ref<Period>("daily");
     <template #body>
       <HomeStats :period="period" :range="range" />
       <!-- <HomeChartClient :period="period" :range="range" /> -->
-      <!-- <HomeSales :period="period" :range="range" /> -->
-      <CryptoPrices  />
+      <!-- <HomeSales /> -->
+      <CryptoPrices :period="period" :range="range" />
 
     </template>
   </UDashboardPanel>
