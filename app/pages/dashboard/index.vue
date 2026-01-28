@@ -1,0 +1,114 @@
+<script setup lang="ts">
+import { sub } from "date-fns";
+import type { DropdownMenuItem } from "@nuxt/ui";
+import type { Period, Range } from "~/types";
+import { useDashboard } from "~/composables/dashboard/shared";
+import HomePeriodSelect from "~/components/dashboard/home/HomePeriodSelect.vue";
+import HomeDateRangePicker from "~/components/dashboard/home/HomeDateRangePicker.vue";
+import HomeStats from "~/components/dashboard/home/HomeStats.vue";
+// import HomeChartClient from "~/components/dashboard/home/HomeChart.client.vue";
+// import HomeSales from "~/components/dashboard/home/HomeSales.vue";
+import { useCryptoPricesAPI } from "~/composables/api/dashboard";
+
+definePageMeta({
+  layout: "dashboard",
+});
+
+const { getCryptoPricesQuery } = useCryptoPricesAPI();
+const queryArgs = computed(() => ({
+  params: {
+    vs_currency: "usd",
+    order: "market_cap_desc",
+    per_page: 10,
+  },
+}));
+
+const { data, isLoading, isError, error } = getCryptoPricesQuery(queryArgs);
+
+const { isNotificationsSlideoverOpen } = useDashboard();
+
+const columns = [
+  { key: "name", label: "Coin" },
+  { key: "current_price", label: "Price (USD)" },
+  { key: "market_cap", label: "Market Cap" },
+];
+const items = [
+  [
+    {
+      label: "New mail",
+      icon: "i-lucide-send",
+      to: "/inbox",
+    },
+    {
+      label: "New customer",
+      icon: "i-lucide-user-plus",
+      to: "/customers",
+    },
+  ],
+] satisfies DropdownMenuItem[][];
+
+const range = shallowRef<Range>({
+  start: sub(new Date(), { days: 14 }),
+  end: new Date(),
+});
+const period = ref<Period>("daily");
+</script>
+
+<template>
+  <UDashboardPanel id="home">
+    <template #header>
+      <UDashboardNavbar title="Home" :ui="{ right: 'gap-3' }">
+        <template #leading>
+          <UDashboardSidebarCollapse />
+        </template>
+
+        <template #right>
+          <!-- <UTooltip text="Notifications" :shortcuts="['N']"> -->
+          <UButton
+            color="neutral"
+            variant="ghost"
+            square
+            @click="isNotificationsSlideoverOpen = true"
+          >
+            <UChip color="error" inset>
+              <UIcon name="i-lucide-bell" class="size-5 shrink-0" />
+            </UChip>
+          </UButton>
+          <!-- </UTooltip> -->
+
+          <UDropdownMenu :items="items">
+            <UButton icon="i-lucide-plus" size="md" class="rounded-full" />
+          </UDropdownMenu>
+        </template>
+      </UDashboardNavbar>
+
+      <UDashboardToolbar>
+        <template #left>
+          <!-- NOTE: The `-ms-1` class is used to align with the `DashboardSidebarCollapse` button here. -->
+          <HomeDateRangePicker v-model="range" class="-ms-1" />
+
+          <HomePeriodSelect v-model="period" :range="range" />
+        </template>
+      </UDashboardToolbar>
+    </template>
+
+    <template #body>
+      <HomeStats :period="period" :range="range" />
+      <!-- <HomeChartClient :period="period" :range="range" />
+      <HomeSales :period="period" :range="range" /> -->
+      <div>
+        <h1 class="text-xl font-semibold mb-4">Crypto Price Tracker</h1>
+
+        <div v-if="isLoading">Loading prices...</div>
+
+        <div v-else-if="isError">Failed to load data: {{ error?.message }}</div>
+
+        <div v-else-if="!data || data.length === 0">
+          No crypto data available
+        </div>
+
+        <UTable v-else :columns="columns" :rows="data" />
+      </div>
+    </template>
+  </UDashboardPanel>
+</template>
