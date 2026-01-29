@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { h, resolveComponent } from "vue";
+import { h } from "vue";
 import type { TableColumn } from "@nuxt/ui";
 
 import { useCryptoPricesAPI } from "~/composables/api/dashboard";
@@ -19,7 +19,6 @@ const props = defineProps<{
   range: { start: Date; end: Date };
 }>();
 
-const UBadge = resolveComponent("UBadge");
 
 // Fetch real crypto data
 
@@ -48,7 +47,7 @@ const columns: TableColumn<Crypto>[] = [
   {
     accessorKey: "symbol",
     header: "Symbol",
-    cell: ({ row }) => row.getValue("symbol").toUpperCase(),
+    cell: ({ row }) => (row?.getValue("symbol") as string)?.toUpperCase(),
   },
   {
     accessorKey: "current_price",

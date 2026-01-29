@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const isClient = import.meta.client
+
 const cards = ref([
   {
     title: "Used advanced technologies",
@@ -31,20 +33,22 @@ const cards = ref([
 </script>
 
 <template>
-  <UPageSection class="container mx-auto" v-motion-visible="sectionMotion">
+  <UPageSection class="container mx-auto" v-if="isClient" v-motion v-motion-visible="sectionMotion">
     <UPageGrid
-        v-motion
-        v-motion-visible="{ once: false }"
-        :initial="{ opacity: 0, y: 40 }"
-        :visible="{
-          opacity: 1,
-          y: 0,
-          transition: {
-            type: 'spring',
-            stiffness: 70,
-            delay: 0.15,
-          },
-        }">
+    v-if="isClient"
+      v-motion
+      v-motion-visible="{ once: false }"
+      :initial="{ opacity: 0, y: 40 }"
+      :visible="{
+        opacity: 1,
+        y: 0,
+        transition: {
+          type: 'spring',
+          stiffness: 70,
+          delay: 0.15,
+        },
+      }"
+    >
       <UCard
         v-for="(card, index) in cards"
         :key="index"
@@ -65,12 +69,14 @@ const cards = ref([
           <div class="group flex justify-between items-center">
             <span
               class="group-hover:text-primary transition-all duration-300 font-extrabold"
-              >Learn More</span
-            >
+              >Learn More</span>
             <span
-              class="group-hover:bg-primary group-hover:-rotate-45 group-hover:text-neutral-50 text-gray-900 bg-neutral-200 rounded-full size-9 p-2 flex items-center justify-center transition-all duration-300"
-              ><UIcon name="i-lucide-arrow-right" class="size-7"
-            /></span>
+              class="group-hover:bg-primary group-hover:-rotate-45 group-hover:text-neutral-50 text-neutral-900 bg-neutral-200 rounded-full size-9 p-2 flex items-center justify-center transition-all duration-300"
+            >
+              <ClientOnly>
+                <UIcon name="i-lucide-arrow-right" class="size-7" />
+              </ClientOnly>
+            </span>
           </div>
         </template>
       </UCard>

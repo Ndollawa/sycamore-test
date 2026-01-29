@@ -6,8 +6,10 @@
     class="relative block h-full transition-transform duration-300 ease-in-out
  group-hover:-translate-y-full"
   >
+  <ClientOnly>
     <UIcon :name="name"  class="flex h-full items-center justify-center"/>
     <UIcon :name="name" class="flex h-full items-center justify-center" />
+  </ClientOnly>
   </span>
   </UButton>
 </template>

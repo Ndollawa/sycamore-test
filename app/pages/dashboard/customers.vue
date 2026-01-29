@@ -9,11 +9,7 @@ import type { User } from '~/types'
 definePageMeta({
 	layout: "dashboard",
 });
-const UAvatar = resolveComponent('UAvatar')
-const UButton = resolveComponent('UButton')
-const UBadge = resolveComponent('UBadge')
-const UDropdownMenu = resolveComponent('UDropdownMenu')
-const UCheckbox = resolveComponent('UCheckbox')
+
 
 const toast = useToast()
 const table = useTemplateRef('table')

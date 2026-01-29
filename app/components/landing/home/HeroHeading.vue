@@ -45,9 +45,9 @@ onUnmounted(() => {
 
 <template>
   <div class="space-y-4">
-    <h1 class="text-2xl md:text-5xl xl:text-6xl font-bold w-xl text-neutral-100 md:leading-16 lg:leading-20 mt-5">
+    <h1 class="text-4xl text-wrap md:text-5xl xl:text-6xl font-bold w-xl text-neutral-100 leading-12 md:leading-16 xl:leading-20 mt-5">
      Financial Security
-      Made
+      <br/>Made
 
       <span
         :key="words[index]?.text"

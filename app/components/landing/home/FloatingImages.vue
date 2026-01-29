@@ -39,8 +39,8 @@
             alt="img6"
         /></span>
         <span></span>
-        <div class="container mx-auto hidden sm:block">
-          <span class="absolute h-[40%] top-8 right-[34.1%] z-3"
+        <div class="container mx-auto hidden lg:block">
+          <span class="absolute h-[40%] md:top-16 md:right-[26%] xl:top-8 xl:right-[34.1%] z-3"
             ><NuxtImg
               class="h-full w-full align-middle"
               src="data:image/svg+xml,%3csvg%20width='299'%20height='353'%20viewBox='0%200%20299%20353'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M82.8994%20299.957C1.6656%20202.325%20-35.6931%20344.357%2074.3868%20347.838C184.467%20351.319%20385.434%20265.915%20246.722%200.984375'%20stroke='%23B2EDA1'%20stroke-width='10'%20stroke-miterlimit='10'/%3e%3c/svg%3e"

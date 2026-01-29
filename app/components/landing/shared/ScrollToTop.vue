@@ -34,52 +34,51 @@
       </svg>
 
       <!-- Arrow icon -->
-      <UIcon
-        name="i-heroicons-arrow-up"
-        class="relative h-5 w-5 text-primary"
-      />
+
+      <ClientOnly>
+        <UIcon
+          name="i-heroicons-arrow-up"
+          class="relative h-5 w-5 text-primary"
+        />
+      </ClientOnly>
     </button>
   </Transition>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from "vue";
 
-const visible = ref(false)
-const progress = ref(0)
+const visible = ref(false);
+const progress = ref(0);
 
-const radius = 45
-const circumference = 2 * Math.PI * radius
+const radius = 45;
+const circumference = 2 * Math.PI * radius;
 
-const dashOffset = computed(() =>
-  circumference * (1 - progress.value)
-)
+const dashOffset = computed(() => circumference * (1 - progress.value));
 
 const updateScroll = () => {
-  const scrollTop = window.scrollY
-  const docHeight =
-    document.documentElement.scrollHeight -
-    window.innerHeight
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
 
-  progress.value = Math.min(scrollTop / docHeight, 1)
-  visible.value = scrollTop > 200
-}
+  progress.value = Math.min(scrollTop / docHeight, 1);
+  visible.value = scrollTop > 200;
+};
 
 const scrollToTop = () => {
   window.scrollTo({
     top: 0,
-    behavior: 'smooth'
-  })
-}
+    behavior: "smooth",
+  });
+};
 
 onMounted(() => {
-  updateScroll()
-  window.addEventListener('scroll', updateScroll)
-})
+  updateScroll();
+  window.addEventListener("scroll", updateScroll);
+});
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', updateScroll)
-})
+  window.removeEventListener("scroll", updateScroll);
+});
 </script>
 
 <style scoped>

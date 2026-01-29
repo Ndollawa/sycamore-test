@@ -3,6 +3,8 @@ import type { ButtonProps } from "@nuxt/ui";
 import { HeroHeading, FloatingImages } from "~/components/landing/home/";
 import { PrimaryButton } from "~/components/landing/shared/";
 
+const isClient = import.meta.client
+
 const links = ref<ButtonProps[]>([
   {
     label: "Get Start for Free",
@@ -19,21 +21,19 @@ const links = ref<ButtonProps[]>([
     size: "lg",
     trailingIcon: "i-lucide-chevron-right",
     class: "rounded-full hover:bg-transparent",
-    ui: {
-      trailingIcon: "rounded-full text-neutral-50 bg-neutral-300/50 size-6",
-    },
   },
 ]);
 </script>
 
 <template>
   <UPageHero
+  v-if="isClient"
     description="Staco is the dedicated platform for human management that helps to grow your startup business quickly."
     class="pt-20 bg-neutral-900"
     orientation="horizontal"
     :links="links"
     :ui="{
-      description: 'text-neutral-100 pt-2 pb-5 md:pt-5 md:pb-9',
+      description: 'text-neutral-100 pt-2 pb-5 md:pt-5 md:pb-9 text-base',
     }"
     v-motion
     :initial="{ opacity: 0, y: 80, scale: 0.98 }"
@@ -82,7 +82,9 @@ const links = ref<ButtonProps[]>([
               transition: { type: 'spring', stiffness: 70 },
             }"
           >
-            <UIcon name="i-lucide-chevron-right" />
+            <ClientOnly>
+              <UIcon name="i-lucide-chevron-right" />
+            </ClientOnly>
           </div>
         </template>
       </UButton>

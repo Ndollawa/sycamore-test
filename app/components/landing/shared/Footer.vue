@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-neutral-50 py-10 px-5 md:py-20 md:px-10" v-motion-visible="sectionMotion">
+  <div class="bg-neutral-50 py-10 px-2 md:py-20 lg:px-10" v-if="isClient" v-motion v-motion-visible="sectionMotion">
       <div
-        class="rounded-3xl bg-neutral-900 text-neutral-300 px-5 py-7 md:px-10 md:py-14"
+        class="rounded-3xl bg-neutral-900 text-neutral-300 px-3 py-7 lg:px-10 md:py-14"
          v-motion
                     v-motion-visible="{ once: false }"
                     :initial="{ opacity: 0, y: 40 }"
@@ -45,7 +45,7 @@
           </div>
 
           <!-- Columns -->
-           <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:col-span-8">
+           <div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:col-span-8">
           <FooterColumn title="Products 🔥" :links="products"  />
           <FooterColumn title="Why Choose ✨" :links="whyChoose"  />
           <FooterColumn title="Resources 📦" :links="resources"  />
@@ -58,11 +58,11 @@
 
         <!-- Bottom bar -->
         <div
-          class="flex flex-col gap-4 text-sm md:text-base md:flex-row md:items-center md:justify-between text-neutral-50"
+          class="flex flex-col gap-4 text-sm md:text-base text-center md:text-left  md:flex-row md:items-center md:justify-between text-neutral-50"
         >
           <span>© 2023 Staco. All rights reserved.</span>
 
-          <div class="flex gap-6">
+          <div class="flex gap-6 justify-center md:justify-start flex-wrap">
             <a href="#" class="hover:text-white">Terms and conditions</a>
             <a href="#" class="hover:text-white">Cookies</a>
             <a href="#" class="hover:text-white">Privacy policy</a>
@@ -76,6 +76,8 @@
 <script setup>
 import FooterColumn from './FooterColumn.vue';
 import SocialIcon from './SocialIcon.vue';
+const isClient = import.meta.client
+
 
 const products = [
   'HR Management',

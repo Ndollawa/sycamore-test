@@ -2,6 +2,145 @@
 import { ref, onMounted, nextTick } from "vue";
 import { useRoute, useRouter } from "#app";
 import PrimaryButton from "./PrimaryButton.vue";
+import type { NavigationMenuItem } from "@nuxt/ui";
+import { useScroll, useBreakpoints } from "@vueuse/core";
+import {cn} from "~/utils";
+
+const isClient = import.meta.client;
+
+const { y } = useScroll(window);
+const breakpoints = useBreakpoints({ md: 768 });
+
+const isMobile = breakpoints.smaller("md");
+const isAtTop = computed(() => y.value < 20);
+
+const items = ref<NavigationMenuItem[][]>([
+  [
+    {
+      label: "Links",
+      type: "label",
+    },
+    {
+      label: "Guide",
+      icon: "i-lucide-book-open",
+      children: [
+        {
+          label: "Introduction",
+          description: "Fully styled and customizable components for Nuxt.",
+          icon: "i-lucide-house",
+        },
+        {
+          label: "Installation",
+          description:
+            "Learn how to install and configure Nuxt UI in your application.",
+          icon: "i-lucide-cloud-download",
+        },
+        {
+          label: "Icons",
+          icon: "i-lucide-smile",
+          description:
+            "You have nothing to do, @nuxt/icon will handle it automatically.",
+        },
+        {
+          label: "Colors",
+          icon: "i-lucide-swatch-book",
+          description:
+            "Choose a primary and a neutral color from your Tailwind CSS theme.",
+        },
+        {
+          label: "Theme",
+          icon: "i-lucide-cog",
+          description:
+            "You can customize components by using the `class` / `ui` props or in your app.config.ts.",
+        },
+      ],
+    },
+    {
+      label: "Composables",
+      icon: "i-lucide-database",
+      children: [
+        {
+          label: "defineShortcuts",
+          icon: "i-lucide-file-text",
+          description: "Define shortcuts for your application.",
+          to: "/docs/composables/define-shortcuts",
+        },
+        {
+          label: "useOverlay",
+          icon: "i-lucide-file-text",
+          description: "Display a modal/slideover within your application.",
+          to: "/docs/composables/use-overlay",
+        },
+        {
+          label: "useToast",
+          icon: "i-lucide-file-text",
+          description: "Display a toast within your application.",
+          to: "/docs/composables/use-toast",
+        },
+      ],
+    },
+    {
+      label: "Components",
+      icon: "i-lucide-box",
+      to: "/docs/components",
+      active: true,
+      defaultOpen: true,
+      children: [
+        {
+          label: "Link",
+          icon: "i-lucide-file-text",
+          description: "Use NuxtLink with superpowers.",
+          to: "/docs/components/link",
+        },
+        {
+          label: "Modal",
+          icon: "i-lucide-file-text",
+          description: "Display a modal within your application.",
+          to: "/docs/components/modal",
+        },
+        {
+          label: "NavigationMenu",
+          icon: "i-lucide-file-text",
+          description: "Display a list of links.",
+          to: "/docs/components/navigation-menu",
+        },
+        {
+          label: "Pagination",
+          icon: "i-lucide-file-text",
+          description: "Display a list of pages.",
+          to: "/docs/components/pagination",
+        },
+        {
+          label: "Popover",
+          icon: "i-lucide-file-text",
+          description:
+            "Display a non-modal dialog that floats around a trigger element.",
+          to: "/docs/components/popover",
+        },
+        {
+          label: "Progress",
+          icon: "i-lucide-file-text",
+          description: "Show a horizontal bar to indicate task progression.",
+          to: "/docs/components/progress",
+        },
+      ],
+    },
+  ],
+  [
+    {
+      label: "GitHub",
+      icon: "i-simple-icons-github",
+      badge: "6k",
+      to: "https://github.com/nuxt/ui",
+      target: "_blank",
+    },
+    {
+      label: "Help",
+      icon: "i-lucide-circle-help",
+      disabled: true,
+    },
+  ],
+]);
 
 /* ======================
    Props
@@ -109,23 +248,52 @@ function selectTab(i: number) {
   hoverTab(i);
 }
 </script>
+
 <template>
-  <header class="fixed top-6 left-1/2 z-50 -translate-x-1/2 hidden sm:block">
+  <header
+    :class="
+      cn(
+        {
+          'fixed top-6 left-1/2 z-50 -translate-x-1/2 hidden xl:block transition-all duration-100':
+            isAtTop && !isMobile,
+        },
+        { 'w-full sticky h-16 left-0 right-0 top-0 z-99999': !isAtTop },
+      )
+    "
+  >
     <nav
-      class="flex items-center gap-8 rounded-full bg-neutral-800/80 backdrop-blur-xl px-6 py-2 text-neutral-200 shadow-lg"
+      v-if="isClient"
+      :class="
+        cn('flex items-center justify-between gap-8 px-6 py-2 shadow-lg',
+          {
+            'rounded-full bg-neutral-800/80 backdrop-blur-xl text-neutral-200':
+              isAtTop && !isMobile,
+          },
+          { 'bg-neutral-200': !isAtTop },
+        )
+      "
       v-motion
-      :initial="{ y: -20, opacity: 0 }"
-      :enter="{ y: 0, opacity: 1 }"
-      :transition="{ duration: 0.5 }"
+      v-motion-visible="{ once: false }"
+      :initial="{ opacity: 0, y: -40 }"
+      :visible="{
+        opacity: 1,
+        y: 0,
+        transition: {
+          type: 'spring',
+          stiffness: 70,
+          delay: 0.15,
+        },
+      }"
     >
       <!-- Logo -->
       <div class="flex items-center gap-2 shrink-0">
         <div class="h-9 w-9 rounded-full bg-primary" />
-        <span class="text-lg font-bold text-neutral-100"> Staco </span>
+        <span :class="cn('text-lg font-bold text-neutral-900',{'text-neutral-100': isAtTop && !isMobile})"> Staco </span>
       </div>
 
       <!-- Tabs / Liquid container -->
       <div
+        v-if="isAtTop && !isMobile"
         ref="containerRef"
         role="tablist"
         class="relative flex items-center h-16 gap-2 rounded-full p-2 overflow-hidden select-none w-160"
@@ -164,24 +332,35 @@ function selectTab(i: number) {
           {{ tab.label }}
         </button>
       </div>
-
+    <!-- <UNavigationMenu orientation="horizontal" :items="items" class="data-[orientation=vertical]:w-48" v-if="!isAtTop" /> -->
       <!-- Right actions -->
-      <div class="flex items-center gap-4 shrink-0">
+      <div class="hidden items-center gap-4 shrink-0 lg:flex">
         <UButton
           variant="ghost"
           size="sm"
-          class="hidden md:flex gap-2 text-neutral-200"
+          class="hidden xl:flex gap-2 text-neutral-200"
         >
           <UIcon name="i-heroicons-globe-alt" />
           EN
         </UButton>
 
-        <UButton variant="ghost" size="sm" class="text-neutral-200">
+        <UButton
+          variant="ghost"
+          size="sm"
+          class="text-neutral-200 hidden xl:block"
+        >
           Sign in
         </UButton>
 
         <PrimaryButton />
+
       </div>
+      <UButton
+          size="md"
+          icon="lucide:menu"
+          color="success"
+          class="md:hidden"
+        ></UButton>
     </nav>
   </header>
 </template>

@@ -3,8 +3,10 @@
 </script>
 
 <template>
-<NuxtLayout class="w-full overflow-x-hidden overflow-y-auto">
+  <div  class="w-full overflow-x-hidden overflow-y-auto">
+<NuxtLayout>
     <NuxtLoadingIndicator />
       <NuxtPage />
 </NuxtLayout>
+</div>
 </template>
